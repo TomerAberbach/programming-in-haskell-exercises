@@ -1,0 +1,2 @@
+It is not feasible in general to check if two functions are equal because we must verify that they return the same results for the same arguments. However, the domains of functions are often extremely or infinitely large so it is infeasible to check every possible input. Additionally, a function may not terminate for some input, but it is not possible to determine if a function terminates in general. Assuming both functions terminate, it is feasible to verify they are equal if their arities are zero.
+

@@ -1,0 +1,3 @@
+expr ::= nat | expr - nat
+nat ::= 0 | 1 | 2 | ...
+

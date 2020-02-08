@@ -1,0 +1,58 @@
+2 + 3
+
+     expr
+   /  |  \
+  /   +   \
+ expr    expr
+  |       |
+ term    term
+  |       |
+factor  factor
+  |       |
+ nat     nat
+  |       |
+  2       3
+
+
+2 * 3 * 4
+
+          expr
+        /  |  \
+       /   *   \
+     expr      expr   
+    /    \      |
+   /      \    term
+ expr    expr   |
+  |       |   factor
+ term    term   |
+  |       |    nat 
+factor  factor  |
+  |       |     4 
+ nat     nat
+  |       |
+  2       3
+
+
+(2 + 3) + 4
+
+          expr
+        /  |  \
+       /   +   \
+     expr     expr  
+      |        |
+     term     term
+      |        |
+    factor   factor
+   /  |   \    |
+  (  expr  )  nat    
+    / |  \     |
+   /  +   \    4
+ expr    expr  
+  |       |   
+ term    term   
+  |       |     
+factor  factor 
+  |       |     
+ nat     nat
+  |       |
+  2       3

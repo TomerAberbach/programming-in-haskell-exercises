@@ -1,0 +1,2 @@
+It does not use up all of its input because it successfully parses a natural number without checking if there's a minus symbol.
+

@@ -1,0 +1,2 @@
+The final simplification of the grammar has a dramatic effect on the efficiency of the parser because when parsing an expression the parser for `term + expr` would be tried first. If `term` is successfully parsed, but `+ expr` is not, then the work of parsing `term` will be thrown out and `term` will be reparsed for the alternative. The same happens for the `factor * term` and `factor` alternatives of `term`. "Factoring out" `term` and `factor`, respectively, ensures that even if the `+ expr` and `* term` components are not found, then `term` and `factor` are not reparsed.
+

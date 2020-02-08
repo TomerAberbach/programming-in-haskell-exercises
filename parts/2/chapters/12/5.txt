@@ -1,0 +1,26 @@
+pure id <*> x = x
+x :: Applicative f => f a
+(pure id <*> x) :: Applicative f => f a
+
+pure (g x) = pure g <*> pure x
+g :: a -> b
+x :: a
+(pure (g x)) :: Applicative f => f b
+
+x <*> pure y = pure (\g -> g y) <*> x
+x :: Applicative f => f (a -> b)
+y :: a
+g :: a -> b
+(\g -> g y) :: (a -> b) -> b
+
+x <*> (y <*> z) = (pure (.) <*> x <*> y) <*> z
+x :: Applicative f => f (a -> b)
+y :: Applicative f => f (c -> a)
+z :: Applicative f => f c
+(y <*> z) :: Applicative f => f a
+(x <*> (y <*> z)) :: Applicative f => f b
+(pure (.) <*> x <*> y) :: Applicative f => f (c -> b)
+(pure (.) <*> x) :: Applicative f => f ((c -> a) -> c -> b)
+(pure (.)) :: Applicative f => f ((a -> b) -> (c -> a) -> c -> b)
+(.) :: (a -> b) -> (c -> a) -> c -> b
+

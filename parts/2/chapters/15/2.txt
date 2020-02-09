@@ -1,0 +1,13 @@
+outermost:
+  fst (1 + 2, 2 + 3)
+  1 + 2
+  3
+
+innermost:
+  fst (1 + 2, 2 + 3)
+  fst (3, 2 + 3)
+  fst (3, 5)
+  3
+
+Outermost is preferable because it requires fewer steps.
+

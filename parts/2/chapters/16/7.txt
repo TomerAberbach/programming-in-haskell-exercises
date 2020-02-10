@@ -1,0 +1,49 @@
+fmap _ Nothing = Nothing
+fmap g (Just x) = Just (g x)
+
+
+Proof: fmap id = id
+  Case Nothing:
+    - fmap id Nothing
+      =    { applying fmap }
+      Nothing
+    - id Nothing
+      =    { applying id }
+      Nothing
+  Case Just v:
+    - fmap id (Just v)
+      =    { applying fmap }
+      Just (id v)
+      =    { applying id }
+      Just v
+    - id (Just v)
+      =    { applying id }
+      Just v
+
+
+Proof: fmap (g . h) = fmap g . fmap h
+  Case Nothing:
+    - fmap (g . h) Nothing
+      =    { applying fmap }
+      Nothing
+    - (fmap g . fmap h) Nothing
+      =    { applying composition }
+      fmap g (fmap h Nothing)
+      =    { applying fmap }
+      fmap g Nothing
+      =    { applying fmap }
+      Nothing
+  Case Just v:
+    - fmap (g . h) (Just v)
+      =    { applying fmap }
+      Just ((g . h) v)
+      =    { applying composition }
+      Just (g (h v))
+    - (fmap g . fmap h) (Just v)
+      =    { applying composition }
+      fmap g (fmap h (Just v))
+      =    { applying fmap }
+      fmap g (Just (h v))
+      =    { applying fmap }
+      Just (g (h v))
+

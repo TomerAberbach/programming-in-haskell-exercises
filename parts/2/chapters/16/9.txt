@@ -1,0 +1,156 @@
+fmap _ Nothing = Nothing
+fmap g (Just x) = Just (g x)
+
+pure :: a -> Maybe a
+pure = Just
+
+(<*>) :: Maybe (a -> b) -> Maybe a -> Maybe b
+Nothing <*> _ = Nothing
+(Just g) <*> mx = fmap g mx
+
+
+Proof: pure id <*> x = x
+  Case Nothing:
+    pure id <*> Nothing
+    =    { applying pure }
+    Just id <*> Nothing
+    =    { applying <*> }
+    fmap id Nothing
+    =    { applying fmap }
+    Nothing
+
+  Case Just x:
+    pure id <*> Just x
+    =    { applying pure }
+    Just id <*> Just x
+    =    { applying <*> }
+    fmap id (Just x)
+    =    { applying fmap }
+    Just (id x)
+    =    { applying id }
+    Just x
+
+
+Proof: pure (g x) = pure g <*> pure x
+  Case Nothing:
+    - pure (g Nothing)
+      =    { applying pure }
+      Just (g Nothing)
+    - pure g <*> pure Nothing
+      =    { applying pure twice }
+      Just g <*> Just Nothing
+      =    { applying <*> }
+      fmap g (Just Nothing)
+      =    { applying fmap }
+      Just (g Nothing)
+
+  Case Just x:
+    - pure (g (Just x))
+      =    { applying pure }
+      Just (g (Just x))
+    - pure g <*> pure (Just x)
+      =    { applying pure twice }
+      Just g <*> Just (Just x)
+      =    { applying <*> }
+      fmap g (Just (Just x))
+      =    { applying fmap }
+      Just (g (Just x))
+
+
+Proof: x <*> pure y = pure (\g -> g y) <*> x
+  Case Nothing:
+    - Nothing <*> pure y
+      =    { applying <*> }
+      Nothing
+    - pure (\g -> g y) <*> Nothing
+      =    { applying pure }
+      Just (\g -> g y) <*> Nothing
+      =    { applying <*> }
+      fmap (\g -> g y) Nothing
+      =    { applying fmap }
+      Nothing
+
+  Case Just x:
+    - Just x <*> pure y
+      =    { applying pure }
+      Just x <*> Just y
+      =    { applying <*> }
+      fmap x (Just y)
+      = Just (x y)
+    - pure (\g -> g y) <*> Just x
+      =    { applying pure }
+      Just (\g -> g y) <*> Just x
+      =    { applying <*> }
+      fmap (\g -> g y) (Just x)
+      =    { applying fmap }
+      Just ((\g -> g y) x)
+      =    { applying lambda }
+      Just (x y)
+
+
+(.)    :: (b -> c) -> (a -> b) -> a -> c
+(.) f g = \x -> f (g x)
+
+Proof: x <*> (y <*> z) = (pure (.) <*> x <*> y) <*> z
+  Case Nothing:
+    - Nothing <*> (y <*> z)
+      =    { applying <*> }
+      Nothing
+    - (pure (.) <*> Nothing <*> y) <*> z
+      =    { applying pure }
+      (Just (.) <*> Nothing <*> y) <*> z
+      =    { applying <*> }
+      (fmap (.) Nothing <*> y) <*> z
+      =    { applying fmap }
+      (Nothing <*> y) <*> z
+      =    { applying <*> }
+      Nothing <*> z
+      =    { applying <*> }
+      Nothing
+
+  Case Just x:
+    - Just x <*> (y <*> z)
+      =    { applying <*> }
+      fmap x (y <*> z)
+      Case y = Nothing:
+        fmap x (Nothing <*> z)
+        =    { applying <*> }
+        fmap x Nothing
+        =    { applying fmap }
+        Nothing
+      Case y = Just v:
+        fmap x (Just v <*> z)
+        =    { applying <*> }
+        fmap x (fmap v z)
+    - (pure (.) <*> Just x <*> y) <*> z
+      =    { unapplying pure }
+      (pure (.) <*> pure x <*> y) <*> z
+      =    { previous proof }
+      (pure (\g -> g x) <*> pure (.) <*> y) <*> z
+      =    { applying pure twice }
+      (Just (\g -> g x) <*> Just (.) <*> y) <*> z
+      =    { applying <*> }
+      (fmap (\g -> g x) Just (.) <*> y) <*> z
+      =    { applying fmap }
+      (Just ((.) x) <*> y) <*> z
+      =    { applying fmap }
+      fmap ((.) x) y <*> z
+      Case y = Nothing:
+        fmap ((.) x) Nothing <*> z
+        =    { applying fmap }
+        Nothing <*> z
+        =    { applying <*> }
+        Nothing
+      Case y = Just v
+        fmap ((.) x) (Just v) <*> z
+        =    { applying fmap }
+        Just (x . v) <*> z
+        =    { applying <*> }
+        fmap (x . v) z
+        =    { functor law }
+        (fmap x . fmap v) z
+        =    { applying . }
+        (\a -> fmap x (fmap v a)) z
+        =    { applying lambda }
+        fmap x (fmap v z)
+

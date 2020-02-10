@@ -1,0 +1,37 @@
+Proof: add n (Succ m) = Succ (add n m)
+
+Base case:
+  add Zero (Succ m)
+=    { applying add }
+  Succ m
+=    { unapplying add }
+  Succ (add Zero m)
+
+Inductive case:
+  add (Succ n) (Succ m)
+=    { applying add }
+  Succ (add n (Succ m))
+=    { induction hypothesis }
+  Succ (Succ (add n m))
+=    { unapplying add }
+  Succ (add (Succ n) m)
+
+
+Proof: add n m = add m n
+
+Base case:
+  add Zero m
+=    { applying add }
+  m
+=    { unapplying add }
+  add m Zero
+
+Inductive case:
+  add (Succ n) m
+=    { applying add }
+  Succ (add n m)
+=    { induction hypothesis }
+  Succ (add m n)
+=    { previous proof }
+  add m (Succ n)
+

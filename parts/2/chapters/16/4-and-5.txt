@@ -1,0 +1,67 @@
+Theorems:
+  1: [] ++ ys = ys
+  2: (x:xs) ++ ys = x : (xs ++ ys)
+
+
+Proof: xs ++ [] = xs
+
+Base case:
+  [] ++ []
+=    { theorem 1 }
+  []
+
+Inductive case:
+  (x:xs) ++ []
+=    { theorem 2 }
+  x : (xs ++ [])
+=    { induction hypothesis }
+  x:xs
+
+
+Proof: xs ++ (ys ++ zs) = (xs ++ ys) ++ zs
+
+Base case:
+  [] ++ (ys ++ zs)
+=    { theorem 1 }
+  ys ++ zs
+=    { theorem 1 }
+  ([] ++ ys) ++ zs
+
+Inductive case:
+  (x:xs) ++ (ys ++ zs)
+=    { theorem 2 }
+  x : (xs ++ (ys ++ zs))
+=    { induction hypothesis }
+  x : ((xs ++ ys) ++ zs)
+=    { theorem 2 }
+  (x : (xs ++ ys)) ++ zs
+=    { theorem 2 }
+  ((x:xs) ++ ys) ++ zs
+
+
+Proof: take n xs ++ drop n xs = xs
+
+Base:
+  take 0 [] ++ drop 0 []
+=    { applying take }
+  [] ++ drop 0 []
+=    { applying drop }
+  [] ++ []
+=    { theorem 1 }
+  []
+
+Inductive case:
+  take (n + 1) (x:xs) ++ drop (n + 1) (x:xs)
+=    { applying take }
+  (x : take ((n + 1) - 1) xs) ++ drop (n + 1) (x:xs)
+=    { applying subtraction }
+  (x : take n xs) ++ drop (n + 1) (x:xs)
+=    { applying drop }
+  (x : take n xs) ++ drop ((n + 1) - 1) xs
+=    { applying subtraction }
+  (x : take n xs) ++ drop n xs
+=    { theorem 2 }
+  x : (take n xs ++ drop n xs)
+=    { induction hypothesis }
+  x:xs
+

@@ -1,0 +1,78 @@
+return :: a -> [a]
+return x = [x]
+
+(>>=) :: [a] -> (a -> [b]) -> [b]
+xs >>= f = [y | x <- xs, y <- f x]
+
+
+Proof: return x >>= f = f x
+  return x >>= f
+  =    { applying return }
+  [x] >>= f
+  =    { applying >>= }
+  [y | v <- [x], y <- f v]
+  =    { applying list comprehension }
+  f x
+
+
+Proof: mx >>= return = mx
+  Base case:
+    [] >>= return
+    =    { applying >>= }
+    [y | x <- [], y <- return x ]
+    =    { applying list comprehension }
+    []
+
+  Inductive case:
+    (x:xs) >>= return
+    =    { applying >>= }
+    [y | v <- (x:xs), y <- return v ]
+    =    { applying iteration of list comprehension }
+    x : [y | v <- xs, y <- return v]
+    =    { unapplying >>= }
+    x : xs >>= return
+    =    { induction hypothesis }
+    x:xs
+
+
+Proof: (mx >>= f) >>= g = mx >>= (\x -> (f x >>= g))
+  Base case:
+    - ([] >>= f) >>= g
+      =    { applying >>= }
+      [y | x <- [], y <- f x] >>= g
+      =    { applying list comprehension }
+      [] >>= g
+      =    { applying >>= }
+      [y | x <- [], y <- g x]
+      =    { applying list comprehension }
+      []
+    - [] >>= (\x -> (f x >>= g))
+      =    { applying >>= }
+      [y | x <- [], y <- (\x -> (f x >>= g)) x]
+      =    { applying list comprehension }
+      []
+
+  Inductive case:
+    - ((x:xs) >>= f) >>= g
+      =    { applying >>= }
+      [y | v <- (x:xs), y <- f v] >>= g
+      =    { applying iteration of list comprehension }
+      (f x ++ [y | v <- xs, y <- f v]) >>= g
+      =    { unapplying >>= }
+      (f x ++ (xs >>= f)) >>= g
+      =    { applying >>= }
+      [y | v <- (f x ++ (xs >>= f)), y <- g v]
+      =    { split list comprehension }
+      [y | v <- f x, y <- g v] ++ [y | v <- (xs >>= f), y <- g v]
+      =    { unapplying >>= twice }
+      (f x >>= g) ++ ((xs >>= f) >>= g)
+      =    { induction hypothesis }
+      (f x >>= g) ++ (xs >>= (\v -> (f v >>= g)))
+    - (x:xs) >>= (\v -> (f v >>= g))
+      =    { applying >>= }
+      [y | a <- (x:xs) y <- (\v -> (f v >>= g)) a]
+      =    { applying iteration of list comprehension }
+      (f x >>= g) ++ [y | a <- xs, y <- (\v -> (f v >>= g)) a]
+      =    { unapplying >>= }
+      (f x >>= g) ++ (xs >>= (\v -> (f v >>= g)))
+
